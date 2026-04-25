@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>请在浏览器打开</title>
+
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S55FRR3FM6"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-S55FRR3FM6', { send_page_view: false });
+</script>
+
+<style>
+body {
+  margin:0;
+}
+
+.mask {
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.arrow {
+  position:absolute;
+  top:10px;
+  right:20px;
+  font-size:40px;
+  color:#fff;
+}
+
+img {
+  max-width:90%;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="mask" class="mask">
+  <div class="arrow">↗</div>
+  <img id="guideImg" src="">
+</div>
+
+<script>
+// ===== 获取 target 参数 =====
+function getTarget() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("target");
+}
+
+// ===== 设备判断 =====
+function getDevice() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (/iphone|ipad|ipod/.test(ua)) return "ios";
+  if (/android/.test(ua)) return "android";
+  return "desktop";
+}
+
+// ===== 微信判断 =====
+function isWeChat() {
+  return /micromessenger/i.test(navigator.userAgent);
+}
+
+var device = getDevice();
+var inWeChat = isWeChat();
+var key = getTarget();
+
+// ===== 安全统计函数（防 GA 未加载报错）=====
+function track(name) {
+  if (typeof gtag === "function") {
+    gtag('event', name, {
+      device: device,
+      in_wechat: inWeChat ? 1 : 0,
+      target: key || 'default'
+    });
+  }
+}
+
+// ===== 页面访问 =====
+track('page_view_redirect');
+
+// ===== 微信内逻辑 =====
+if (inWeChat) {
+
+  document.getElementById("mask").style.display = "flex";
+
+  var img = document.getElementById("guideImg");
+
+  if (device === "ios") {
+    img.src = "ios.png";
+  } else {
+    img.src = "android.png";
+  }
+
+  // 记录：微信曝光（带来源）
+  track('wechat_view_' + (key || 'default'));
+
+} else {
+
+  // ===== 目标映射 =====
+  var targetMap = {
+    "a": "https://jh144000.com/posts/biblical-love/",
+    "b": "https://jh144000.com/page2",
+    "c": "https://jh144000.com/page3"
+  };
+
+  var targetUrl = targetMap[key] || "https://jh144000.com";
+
+  // 记录：跳转成功（带来源）
+  track('redirect_success_' + (key || 'default'));
+
+  // 延迟跳转（保证统计发送）
+  setTimeout(function() {
+    window.location.href = targetUrl;
+  }, 300);
+}
+</script>
+
+</body>
+</html>
