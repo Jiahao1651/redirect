@@ -19,26 +19,35 @@ body {
   margin:0;
 }
 
+/* 遮罩层 */
 .mask {
   position:fixed;
   top:0;left:0;right:0;bottom:0;
   background:rgba(0,0,0,0.9);
   display:none;
+
+  display:flex;
   justify-content:center;
   align-items:center;
 }
 
-.arrow {
-  position:absolute;
-  top:10px;
-  right:20px;
-  font-size:40px;
-  color:#fff;
-}
-
+/* 图片 */
 img {
   max-width:90%;
   border-radius:12px;
+}
+
+/* 底部文字 */
+.bottom-text {
+  position:absolute;
+  bottom:20px;
+  left:0;
+  width:100%;
+  text-align:center;
+  color:#fff;
+  font-size:14px;
+  opacity:0.8;
+  padding:0 20px;
 }
 </style>
 </head>
@@ -46,8 +55,10 @@ img {
 <body>
 
 <div id="mask" class="mask">
-  <div class="arrow">↗</div>
   <img id="guideImg" src="">
+  <div class="bottom-text">
+    本页面UI设计参考领受这道网站，侵权删
+  </div>
 </div>
 
 <script>
@@ -96,9 +107,9 @@ if (inWeChat) {
   var img = document.getElementById("guideImg");
 
   if (device === "ios") {
-    img.src = "ios.png";
+    img.src = "ios.jpg";
   } else {
-    img.src = "android.png";
+    img.src = "android.jpg";
   }
 
   // 记录：微信曝光（带来源）
